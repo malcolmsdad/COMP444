@@ -11,4 +11,4 @@ I will include images/videos examples of exercises within the pages when possibl
 (FYI Malcolm is the name of one of my adorable dumb cats)
 
 Each Unit submission will also include an update to my OneNote course notebook available on my git here:
-https://github.com/malcolmsdad/COMP444/tree/main
+https://github.com/malcolmsdad/COMP444/blob/b791a358d630fa62a81468a82ad0c06a288fb241/COMP%20444%20-%20Timothy%20Blake%20-%20Course%20Notebook.onepkg
