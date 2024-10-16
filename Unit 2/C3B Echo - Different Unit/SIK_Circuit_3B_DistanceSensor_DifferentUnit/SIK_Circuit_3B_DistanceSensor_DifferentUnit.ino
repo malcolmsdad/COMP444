@@ -18,7 +18,7 @@ const int redPin = 3;             //pin to control the red LED inside the RGB LE
 const int greenPin = 5;           //pin to control the green LED inside the RGB LED
 const int bluePin = 6;            //pin to control the blue LED inside the RGB LED
 
-const String unit = "in";          // CM for centimeters, IN for inches
+const String unit = "in";         // "cm" for centimeters, "in" for inches
                 //= "cm";           
 
 float distance = 0;               //stores the distance measured by the distance sensor
