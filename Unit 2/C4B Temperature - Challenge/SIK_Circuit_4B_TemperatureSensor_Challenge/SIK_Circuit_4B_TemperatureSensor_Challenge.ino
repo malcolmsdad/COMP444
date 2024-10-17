@@ -22,14 +22,14 @@ int redPin = 4;
 int greenPin = 5;
 int bluePin = 6;
 
-int potPin = 2;
+int lowTempC = 15;
+int highTempC = 40;
 
-int lowTempC = 0;
-int highTempC = 50;
+int lowPot = 4;
+int highPot = 290;
 
-int lowPot = 20;
-int highPot = 160;
-
+double showPotBarMode = 0;
+double nextDrawTime = 0;
 
 void setup() {
 
@@ -40,6 +40,9 @@ void setup() {
   pinMode(redPin, OUTPUT);
   pinMode(greenPin, OUTPUT);
   pinMode(bluePin, OUTPUT);
+
+  // set up the photoresistor
+  Serial.begin(9600);
 }
 
 // easy little helper to write to the led
@@ -75,31 +78,97 @@ void calcRgb(int percent) {
     case 20: analogWriteRGB(255, 0, 0); break;
     default: analogWriteRGB(0, 255, 0); break;  // Red  // Green
   }
-
 }
 
-void drawTemp(int cel){
-  double percent = double(cel - lowTempC) / double(highTempC - lowTempC);
-  lcd.print(percent);
+void drawTempOnRgb() {
+  double percent = double(degreesC - lowTempC) / double(highTempC - lowTempC);
+  //lcd.print(percent);
   calcRgb(percent * 100);
 }
 
-void loop() {
+int lastPot = 0;
+void readPot() {
+  int potRead = analogRead(A2);
 
+  // if the last pot is more than 2 degrees of, set PotBar mode
+  if (abs(potRead - lastPot) > 3) {
+    showPotBarMode = millis() + 3000;  // show pot bar for 3 seconds
+  }
+
+  // record last reading
+  lastPot = potRead;
+}
+
+
+int lastLight = 0;
+void readLight() {
+  int lightRead = analogRead(A1);
+
+  // if the last pot is more than 2 degrees of, set PotBar mode
+  if (abs(lightRead - lastLight) > 3) {
+    showPotBarMode = millis() + 3000;  // show pot bar for 3 seconds
+  }
+
+  // record last reading
+  lastLight = lightRead;
+}
+
+void drawTempOnLCD() {
+  lcd.clear();  //clear the LCD
+
+  lcd.setCursor(0, 0);       //set the cursor to the top left position
+  lcd.print("Degrees C: ");  //print a label for the data
+  lcd.print(degreesC);       //print the degrees Celsius
+
+  lcd.setCursor(0, 1);       //set the cursor to the lower left position
+  lcd.print("Degrees F: ");  //Print a label for the data
+  lcd.print(degreesF);       //print the degrees Fahrenheit
+}
+
+void drawPotBars() {
+  lcd.clear();  //clear the LCD
+
+  //calc how many asterix to draw
+  double percent = double(degreesC - lowTempC) / double(highTempC - lowTempC);
+  int numberOf = percent * 14;  // there are 14 positions to draw
+
+  lcd.setCursor(0, 0);  //set the cursor to the top left position
+  lcd.print(lowTempC);
+  for (int i = 0; i < 12; i++)
+    lcd.print("-");
+  lcd.print(highTempC);
+
+  lcd.setCursor(0, 1);  //set the cursor to the lower left position
+  lcd.print("[");
+  // draw 14 stars or blanks
+  for (int i = 0; i < numberOf; i++)
+    lcd.print("*");
+
+  // wow, why didn't I think of this earlier..
+  lcd.setCursor(15, 1);
+  lcd.print("]");
+}
+
+void loop() {
+  // read temp
   voltage = analogRead(A0) * 0.004882813;    //convert the analog reading, which varies from 0 to 1023, back to a voltage value from 0-5 volts
   degreesC = (voltage - 0.5) * 100.0;        //convert the voltage to a temperature in degrees Celsius
   degreesF = degreesC * (9.0 / 5.0) + 32.0;  //convert the voltage to a temperature in degrees Fahrenheit
 
-  lcd.clear();  //clear the LCD
+  // always draw rgb
+  drawTempOnRgb();
 
-  lcd.setCursor(0, 0);       //set the cursor to the top left position
- // lcd.print("Degrees C: ");  //print a label for the data
- // lcd.print(degreesC);       //print the degrees Celsius
-  drawTemp(degreesC);
+  if (showPotBarMode > millis())
+    drawPotBars();
+  else
+    drawTempOnLCD();
 
-  lcd.setCursor(0, 1);       //set the cursor to the lower left position
- // lcd.print("Degrees F: ");  //Print a label for the data
- // lcd.print(degreesF);       //print the degrees Fahrenheit
+
+  // read the pot
+  readPot();
+
+  // read light
+  readLight();
 
   delay(1000);  //delay for 1 second between each reading (this makes the display less noisy)
 }
