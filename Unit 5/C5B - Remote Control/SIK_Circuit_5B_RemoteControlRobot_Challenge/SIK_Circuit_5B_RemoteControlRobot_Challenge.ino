@@ -137,16 +137,22 @@ void wiggleWheel()
 
 void driveZigZag(int distance) {
 
-  Serial.write("Zig zag avoidance maneouver..");
-  driveForward(driveTime * 10);
-  driveLeft(driveTime * 20);
-  driveForward(driveTime * 50);
-  driveRight(driveTime * 10);
-  driveForward(driveTime * 50);
-  driveRight(driveTime * 20);
-  driveForward(driveTime * 50);
-  driveLeft(driveTime * 20);
-  driveForward(driveTime * 25);
+  Serial.write("ZigZag Maneouver..");
+  
+  int forwardDist = 100;
+  int turnDist = 10;
+  int adjDist = 3;
+
+  driveForward(driveTime * forwardDist);
+  driveLeft(driveTime * turnDist);
+  driveForward(driveTime * forwardDist);
+  driveRight(driveTime * turnDist);
+  driveForward(driveTime * adjDist);
+  driveRight(driveTime * turnDist);
+  driveForward(driveTime * forwardDist);
+  driveLeft(driveTime * turnDist);
+  driveForward(driveTime * forwardDist);
+
 }
 
 
