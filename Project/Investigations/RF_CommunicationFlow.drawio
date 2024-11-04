@@ -1,0 +1,169 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36 Edg/130.0.0.0" version="24.8.3">
+  <diagram name="Page-1" id="edf60f1a-56cd-e834-aa8a-f176f3a09ee4">
+    <mxGraphModel dx="2677" dy="1955" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" background="none" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="byZUimq9GUJhlWeJo7_2-65" value="HomeAutomation Server" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#475E75;fillColor=#F5F6F7;arcSize=24;absoluteArcSize=1;imageWidth=64;imageHeight=64;strokeWidth=1.5;verticalAlign=top;align=left;fontSize=16;fontStyle=1;spacingTop=10;spacingLeft=20;" vertex="1" parent="1">
+          <mxGeometry x="460" y="-355" width="710" height="540" as="geometry" />
+        </mxCell>
+        <mxCell id="byZUimq9GUJhlWeJo7_2-66" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#475E75;fillColor=#ffffff;arcSize=24;absoluteArcSize=1;imageWidth=64;imageHeight=64;strokeWidth=1.5;part=1;" vertex="1" parent="byZUimq9GUJhlWeJo7_2-65">
+          <mxGeometry x="18.44" y="54.91525423728814" width="671.56" height="466.77966101694915" as="geometry" />
+        </mxCell>
+        <mxCell id="byZUimq9GUJhlWeJo7_2-60" value="Robot" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#475E75;fillColor=#F5F6F7;arcSize=24;absoluteArcSize=1;imageWidth=64;imageHeight=64;strokeWidth=1.5;verticalAlign=top;align=left;fontSize=16;fontStyle=1;spacingTop=10;spacingLeft=20;" vertex="1" parent="1">
+          <mxGeometry x="-10" y="-335" width="430" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="byZUimq9GUJhlWeJo7_2-61" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#475E75;fillColor=#ffffff;arcSize=24;absoluteArcSize=1;imageWidth=64;imageHeight=64;strokeWidth=1.5;part=1;" vertex="1" parent="byZUimq9GUJhlWeJo7_2-60">
+          <mxGeometry x="22.05" y="50" width="385.9" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="byZUimq9GUJhlWeJo7_2-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" target="byZUimq9GUJhlWeJo7_2-5">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="180" y="-633" as="targetPoint" />
+            <mxPoint x="390" y="-663" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="390" y="-583" />
+              <mxPoint x="230" y="-583" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="byZUimq9GUJhlWeJo7_2-8" value="No" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="byZUimq9GUJhlWeJo7_2-7">
+          <mxGeometry x="-0.1806" y="-1" relative="1" as="geometry">
+            <mxPoint x="-41" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="byZUimq9GUJhlWeJo7_2-11" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="60e70716793133e9-5" target="byZUimq9GUJhlWeJo7_2-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="60e70716793133e9-5" value="Is Light &amp;gt; Limit" style="rhombus;whiteSpace=wrap;html=1;rounded=0;shadow=1;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=8;align=center;" parent="1" vertex="1">
+          <mxGeometry x="340" y="-693" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="byZUimq9GUJhlWeJo7_2-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="60e70716793133e9-8" target="byZUimq9GUJhlWeJo7_2-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="60e70716793133e9-8" value="Robot Operates" style="rounded=1;whiteSpace=wrap;html=1;shadow=1;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=8;align=center;" parent="1" vertex="1">
+          <mxGeometry x="30" y="-683" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="byZUimq9GUJhlWeJo7_2-6" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="byZUimq9GUJhlWeJo7_2-5" target="60e70716793133e9-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="byZUimq9GUJhlWeJo7_2-5" value="Robot: ReadLight()" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;" vertex="1" parent="1">
+          <mxGeometry x="170" y="-693" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="byZUimq9GUJhlWeJo7_2-13" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="byZUimq9GUJhlWeJo7_2-10" target="byZUimq9GUJhlWeJo7_2-12">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="byZUimq9GUJhlWeJo7_2-10" value="Prepare data packet" style="whiteSpace=wrap;html=1;fontSize=8;fontFamily=Verdana;rounded=0;shadow=1;labelBackgroundColor=none;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="490" y="-688" width="110" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="byZUimq9GUJhlWeJo7_2-15" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="byZUimq9GUJhlWeJo7_2-12" target="byZUimq9GUJhlWeJo7_2-14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="byZUimq9GUJhlWeJo7_2-12" value="Transmit data" style="rounded=1;whiteSpace=wrap;html=1;shadow=1;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=8;align=center;" vertex="1" parent="1">
+          <mxGeometry x="650" y="-683" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="byZUimq9GUJhlWeJo7_2-14" value="Robot: TransmitData()" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;fontSize=8;fontFamily=Verdana;rounded=1;shadow=1;labelBackgroundColor=none;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="640" y="-597" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="byZUimq9GUJhlWeJo7_2-20" value="&lt;h1 style=&quot;margin-top: 0px;&quot;&gt;Light Sensing and Reporting&lt;/h1&gt;&lt;div&gt;This process describes how the robot reads the ambient light level, analyzes the level, and transmit a data packet with the light level information.&lt;/div&gt;" style="text;html=1;whiteSpace=wrap;overflow=hidden;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="30" y="-820" width="410" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="byZUimq9GUJhlWeJo7_2-28" value="Transmit" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="byZUimq9GUJhlWeJo7_2-23" target="byZUimq9GUJhlWeJo7_2-27">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="byZUimq9GUJhlWeJo7_2-23" value="Robot: TransmitData()" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;fontSize=8;fontFamily=Verdana;rounded=1;shadow=1;labelBackgroundColor=none;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="-253" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="byZUimq9GUJhlWeJo7_2-27" value="Arduno RF Transmitter" style="verticalLabelPosition=bottom;shadow=0;dashed=0;align=center;html=1;verticalAlign=top;shape=mxgraph.electrical.radio.aerial_-_antenna_2;" vertex="1" parent="1">
+          <mxGeometry x="290" y="-273" width="79" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="byZUimq9GUJhlWeJo7_2-33" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="byZUimq9GUJhlWeJo7_2-29" target="byZUimq9GUJhlWeJo7_2-32">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="byZUimq9GUJhlWeJo7_2-29" value="" style="pointerEvents=1;verticalLabelPosition=bottom;shadow=0;dashed=0;align=center;html=1;verticalAlign=top;shape=mxgraph.electrical.waveforms.sine_wave;" vertex="1" parent="1">
+          <mxGeometry x="410" y="-256.09" width="90" height="66.18" as="geometry" />
+        </mxCell>
+        <mxCell id="byZUimq9GUJhlWeJo7_2-31" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=-0.05;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="byZUimq9GUJhlWeJo7_2-27" target="byZUimq9GUJhlWeJo7_2-29">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="byZUimq9GUJhlWeJo7_2-35" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="byZUimq9GUJhlWeJo7_2-32" target="byZUimq9GUJhlWeJo7_2-34">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="byZUimq9GUJhlWeJo7_2-53" value="Message received" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="byZUimq9GUJhlWeJo7_2-35">
+          <mxGeometry x="0.0403" y="2" relative="1" as="geometry">
+            <mxPoint x="1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="byZUimq9GUJhlWeJo7_2-32" value="&lt;div&gt;RTL-SDR Receiver&lt;/div&gt;" style="verticalLabelPosition=bottom;shadow=0;dashed=0;align=center;html=1;verticalAlign=top;shape=mxgraph.electrical.radio.aerial_-_antenna_2;" vertex="1" parent="1">
+          <mxGeometry x="520" y="-273" width="79" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="byZUimq9GUJhlWeJo7_2-39" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="byZUimq9GUJhlWeJo7_2-34" target="byZUimq9GUJhlWeJo7_2-38">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="byZUimq9GUJhlWeJo7_2-54" value="Decoded and published" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="byZUimq9GUJhlWeJo7_2-39">
+          <mxGeometry x="-0.0936" y="7" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="byZUimq9GUJhlWeJo7_2-34" value="RTL SDR Monitor Service" style="whiteSpace=wrap;html=1;verticalAlign=top;shadow=0;dashed=0;" vertex="1" parent="1">
+          <mxGeometry x="720" y="-253" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="byZUimq9GUJhlWeJo7_2-43" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="byZUimq9GUJhlWeJo7_2-38" target="byZUimq9GUJhlWeJo7_2-42">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="byZUimq9GUJhlWeJo7_2-44" value="Subscribes to Queue&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="byZUimq9GUJhlWeJo7_2-43">
+          <mxGeometry x="0.2447" y="5" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="byZUimq9GUJhlWeJo7_2-38" value="MQTT Message Queue" style="sketch=0;pointerEvents=1;shadow=0;dashed=0;html=1;strokeColor=none;fillColor=#505050;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;outlineConnect=0;align=center;shape=mxgraph.office.communications.queue_viewer;" vertex="1" parent="1">
+          <mxGeometry x="1000.5" y="-251.5" width="59" height="57" as="geometry" />
+        </mxCell>
+        <mxCell id="byZUimq9GUJhlWeJo7_2-46" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="byZUimq9GUJhlWeJo7_2-42" target="byZUimq9GUJhlWeJo7_2-45">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="byZUimq9GUJhlWeJo7_2-55" value="Processes message" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="byZUimq9GUJhlWeJo7_2-46">
+          <mxGeometry x="-0.0175" y="7" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="byZUimq9GUJhlWeJo7_2-42" value="NodeRed" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="970" y="-105" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="byZUimq9GUJhlWeJo7_2-48" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="byZUimq9GUJhlWeJo7_2-45" target="byZUimq9GUJhlWeJo7_2-47">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="byZUimq9GUJhlWeJo7_2-52" value="NodeRed instructs HA" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="byZUimq9GUJhlWeJo7_2-48">
+          <mxGeometry x="-0.3259" y="-7" relative="1" as="geometry">
+            <mxPoint x="-17" y="27" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="byZUimq9GUJhlWeJo7_2-45" value="Is Message: &quot;Light &amp;gt; Limit&quot;?" style="rhombus;whiteSpace=wrap;html=1;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="935.25" y="55" width="189.5" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="byZUimq9GUJhlWeJo7_2-50" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="byZUimq9GUJhlWeJo7_2-47" target="byZUimq9GUJhlWeJo7_2-49">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="byZUimq9GUJhlWeJo7_2-51" value="HA instructs ZWave" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="byZUimq9GUJhlWeJo7_2-50">
+          <mxGeometry x="-0.1444" y="5" relative="1" as="geometry">
+            <mxPoint x="-25" y="5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="byZUimq9GUJhlWeJo7_2-47" value="HomeAssistant: Turn Off Main Level Lights" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="680" y="65" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="byZUimq9GUJhlWeJo7_2-49" value="ZWave: Main Level Off" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="680" y="-85" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="byZUimq9GUJhlWeJo7_2-57" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="40" y="-480" as="sourcePoint" />
+            <mxPoint x="1070" y="-480" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="byZUimq9GUJhlWeJo7_2-58" value="&lt;h1 style=&quot;margin-top: 0px;&quot;&gt;Radio Frequency Communication&lt;/h1&gt;&lt;div&gt;How will data be transmitted, received and processed by home autiomation software system.&lt;/div&gt;" style="text;html=1;whiteSpace=wrap;overflow=hidden;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="50" y="-425" width="410" height="120" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
