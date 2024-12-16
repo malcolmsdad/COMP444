@@ -98,8 +98,9 @@ void calculateMotorSpeed() {
     // going forward
     if (testDistance < 40) cmdDrive = TranslateSpeedExp(-3);
     else if (testDistance < 50) cmdDrive = TranslateSpeedExp(-1);
-    else if (testDistance < 60) cmdDrive = TranslateSpeedExp(1);
+    else if (testDistance < 60 || forwardSpeed < 5) cmdDrive = TranslateSpeedExp(3);
     else if (testDistance < 85) cmdDrive = TranslateSpeedExp(2);
+    else if (testDistance < 85) cmdDrive = TranslateSpeedExp(1);
   }
 }
 
@@ -174,7 +175,7 @@ void driveMotor() {
 
   // check max speed!!  if prevSpeed[1,2,3] > 500 SLOW DOWN
   cmdDrive = min(cmdDrive, 255);
-  if (cmdDrive > 0 && cmdDrive + prevDrive1 + prevDrive2 + prevDrive3 > 900) {
+  if (cmdDrive > 0 && forwardSpeed > 10) {
     cmdDrive = 234;
     coastChar = "CST";
   }
@@ -230,8 +231,10 @@ void steerMotor() {
     digitalWrite(MTR_STEER_PIN1, LOW);
     digitalWrite(MTR_STEER_PIN2, HIGH);
   }
-  // pause to allow wheel to turn
-  delayMicroseconds(500);
+
+  //steering slows the motor down!
+  if (tmpSteer >= 245)
+    cmdDrive = 245;
 
   // record previous speed
   prevDirection = cmdSteer;
@@ -239,7 +242,7 @@ void steerMotor() {
 
 void resumeMotors() {
   driveMotor();
-  //steerMotor();
+  steerMotor();
 }
 
 
@@ -306,5 +309,5 @@ void loop() {
   outputState();
 
   // take a nap
-  delayMicroseconds(500);
+  delayMicroseconds(50);
 }
