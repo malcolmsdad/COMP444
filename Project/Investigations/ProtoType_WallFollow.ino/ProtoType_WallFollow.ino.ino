@@ -87,8 +87,8 @@ void calculateMotorSpeed() {
 
   // in reverse..
   if (prevDrive < 0) {
-    if (distanceFront < 45) cmdDrive = TranslateSpeedExp(-3);
-    else if (distanceFront < 55) cmdDrive = TranslateSpeedExp(-1);
+    if (distanceFront < 25) cmdDrive = TranslateSpeedExp(-3);
+    else if (distanceFront < 35) cmdDrive = TranslateSpeedExp(-1);
     else cmdDrive = TranslateSpeedExp(1);
     return;
   } else {
@@ -96,7 +96,7 @@ void calculateMotorSpeed() {
     long testDistance = distanceFront + max(30, forwardSpeed);
 
     // going forward
-    if (testDistance < 40) cmdDrive = TranslateSpeedExp(-3);
+    if (testDistance < 40 || distanceFront < 20) cmdDrive = TranslateSpeedExp(-3);
     else if (testDistance < 50) cmdDrive = TranslateSpeedExp(-1);
     else if (testDistance < 60 || forwardSpeed < 5) cmdDrive = TranslateSpeedExp(3);
     else if (testDistance < 85) cmdDrive = TranslateSpeedExp(2);
@@ -175,7 +175,7 @@ void driveMotor() {
 
   // check max speed!!  if prevSpeed[1,2,3] > 500 SLOW DOWN
   cmdDrive = min(cmdDrive, 255);
-  if (cmdDrive > 0 && forwardSpeed > 10) {
+  if (cmdDrive > 0 && forwardSpeed > 2) {
     cmdDrive = 234;
     coastChar = "CST";
   }
