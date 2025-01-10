@@ -1,4 +1,8 @@
+#include <Wire.h>
+#include "Adafruit_MPU6050.h"
+#include "Adafruit_Sensor.h"
 
+Adafruit_MPU6050 mpu;
 
 #define PWM_DRIVE_PIN 5
 #define MTR_DRIVE_PIN1 6  //6
@@ -59,6 +63,62 @@ long prevDrive1 = 0;
 String reverseChar = "";
 String coastChar = "";
 
+float velocityX = 0;
+float velocityY = 0;
+
+float gyroSpeed = 0;
+
+unsigned long lastTime;
+
+// Calibration variables
+float accelXOffset = 0;
+float accelYOffset = 0;
+float accelZOffset = 0;
+
+void calibrateMPU(int calibrationSamples = 500) {
+    Serial.println("Calibrating MPU6050...");
+    float totalAccelX = 0;
+    float totalAccelY = 0;
+    float totalAccelZ = 0;
+
+    for (int i = 0; i < calibrationSamples; i++) {
+        sensors_event_t a, g, temp;
+        mpu.getEvent(&a, &g, &temp);
+
+        totalAccelX += a.acceleration.x;
+        totalAccelY += a.acceleration.y;
+        totalAccelZ += a.acceleration.z;
+
+        delay(10);
+    }
+
+    accelXOffset = totalAccelX / calibrationSamples;
+    accelYOffset = totalAccelY / calibrationSamples;
+    accelZOffset = (totalAccelZ / calibrationSamples) - 9.81; // Adjust for gravity
+
+    Serial.println("Calibration complete.");
+}
+
+
+void setupMPU(){
+    // Initialize MPU6050
+    if (!mpu.begin()) {
+        Serial.println("Failed to find MPU6050 chip");
+        while (1) {
+            delay(10);
+        }
+    }
+
+    // Set ranges and filter bandwidth
+    mpu.setAccelerometerRange(MPU6050_RANGE_8_G);
+    mpu.setGyroRange(MPU6050_RANGE_2000_DEG);
+    mpu.setFilterBandwidth(MPU6050_BAND_5_HZ); 
+
+  calibrateMPU(500);
+
+    lastTime = millis(); 
+}
+
 void setup() {
   pinMode(PWM_DRIVE_PIN, OUTPUT);
   pinMode(PWM_STEER_PIN, OUTPUT);
@@ -77,8 +137,43 @@ void setup() {
   pinMode(TRIG_PIN_LEFT_45, OUTPUT);
   pinMode(ECHO_PIN_LEFT_45, INPUT);
 
+  setupMPU();
+
   digitalWrite(STDBY_PIN, HIGH);  // Enable motor driver standby mode
   Serial.begin(9600);             // Initialize serial communication
+}
+
+
+void calculateGyroSpeed(){
+      sensors_event_t a, g, temp;
+
+    // Get new sensor events
+    mpu.getEvent(&a, &g, &temp);
+
+    unsigned long currentTime = millis();
+    float dt = (currentTime - lastTime) / 1000.0; // Time difference in seconds
+    lastTime = currentTime;
+
+    // Calculate acceleration
+    float ax = a.acceleration.x - accelXOffset;
+    float ay = a.acceleration.y - accelYOffset;
+
+    // Calculate velocity by integrating acceleration
+    if (ax > 0)
+      velocityX = floor(ax * dt * 4) / 4.0;
+    else
+      velocityX = ceil(ax * dt * 2) / 2.0;
+
+    // Calculate the resultant speed in the X and Y plane
+    gyroSpeed += velocityX;
+
+    Serial.print("~");
+    Serial.print(ax);
+    Serial.print("`");
+    Serial.print(velocityX);
+    Serial.print("`");
+    Serial.print(gyroSpeed);
+    Serial.print("~");
 }
 
 void calculateMotorSpeed() {
@@ -164,7 +259,10 @@ void outputState() {
   Serial.print("] [");
   Serial.print(coastChar);
 
-  Serial.println("]");
+  Serial.print("] <");
+  Serial.print(gyroSpeed);
+
+  Serial.println(">");
 }
 
 void driveMotor() {
@@ -189,6 +287,9 @@ void driveMotor() {
     digitalWrite(MTR_DRIVE_PIN1, LOW);
     digitalWrite(MTR_DRIVE_PIN2, LOW);
     analogWrite(PWM_DRIVE_PIN, 0);
+
+    // recalibrate gyro
+    //calibrateMPU(100);
   }
 
   // set motor speed
@@ -256,6 +357,10 @@ long readDistance(int trigPin, int echoPin, long prevDistance) {
   long duration = pulseIn(echoPin, HIGH);
   long distance = duration * 0.034 / 2;  // Convert to cm
 
+  sensors_event_t a, g, temp; 
+  // Get new sensor events 
+  mpu.getEvent(&a, &g, &temp);
+
   // ignore over 100 cm
   return distance;
 }
@@ -287,6 +392,9 @@ long TranslateSpeedExp(long inValue) {
 }
 
 void loop() {
+  // read gyro speed
+  calculateGyroSpeed();
+
   // resume drive speeds
   resumeMotors();
 
