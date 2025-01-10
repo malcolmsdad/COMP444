@@ -22,12 +22,12 @@ const int MID_DISTANCE = 60;
 const int MIN_DISTANCE = 35;
 const int STOP_DISTANCE = 20;
 
-const int DRIVE_FAST = 255;
-const int DRIVE_SLOW = 150;
-const int DRIVE_COAST = 90;
+const int DRIVE_FAST = 225;
+const int DRIVE_SLOW = 205;
+const int DRIVE_COAST = 155;
 
 const int STEER_SLOW = 220;
-const int STEER_FAST = 245;
+const int STEER_FAST = 255;
 
 long lastDistance1 = 0;
 long lastDistance2 = 0;
@@ -82,6 +82,8 @@ int calcDrive(int drive) {
 }
 
 int lastDriveValue = -1;
+int lastSteer = 0;
+
 
 // Function to drive forward
 void driveForward(int pwmValue) {
@@ -97,54 +99,64 @@ void driveForward(int pwmValue) {
   lastDriveValue = pwmValue;
 }
 
-String lastTurn = "";
+// Function to steer left with specified PWM value
+void steerLeft(int pwm) {
+  Serial.print(" [steerLeft:");
+  Serial.print(pwm);
+  Serial.print("]");
 
-int calcSteer(String currentTurn, int pwm) {
-  if (currentTurn == lastTurn)
-    return pwm;
+  if (lastSteer > 0) {
+    digitalWrite(MTR_STEER_PIN1, LOW);
+    digitalWrite(MTR_STEER_PIN2, HIGH);
+  }
+  analogWrite(PWM_STEER_PIN, pwm);
+  delay(50);
+}
 
-  lastTurn = currentTurn;
-  return STEER_FAST;
+// Function to steer right with specified PWM value
+void steerRight(int pwm) {
+  Serial.print(" [steerRight:");
+  Serial.print(pwm);
+  Serial.print("]");
+
+  if (lastSteer < 0) {
+    digitalWrite(MTR_STEER_PIN1, HIGH);
+    digitalWrite(MTR_STEER_PIN2, LOW);
+  }
+  analogWrite(PWM_STEER_PIN, pwm);
+  delay(50);
+}
+
+void steerWheels(int cmdSteer) {
+
+  // now steer wheels
+  if (cmdSteer < 0)
+    steerLeft(abs(cmdSteer));
+  else
+    steerRight(abs(cmdSteer));
+
+  // store steer
+  lastSteer = cmdSteer;
 }
 
 // Function to turn right sharply
 void turnRightSharp() {
-
-  Serial.print(" [turnRightSharp] ");
-  digitalWrite(MTR_STEER_PIN1, HIGH);
-  digitalWrite(MTR_STEER_PIN2, LOW);
-  analogWrite(PWM_STEER_PIN, calcSteer("turnRightSharp", STEER_FAST));
-  delay(STEER_FAST);
+  steerWheels(STEER_FAST);
 }
 
 // Function to turn left sharply
 void turnLeftSharp() {
-
-  Serial.print(" [turnLeftSharp] ");
-  digitalWrite(MTR_STEER_PIN1, LOW);
-  digitalWrite(MTR_STEER_PIN2, HIGH);
-  analogWrite(PWM_STEER_PIN, calcSteer("turnLeftSharp", STEER_FAST));
-  delay(STEER_FAST);
+  steerWheels(STEER_FAST * -1);
 }
 
 // Function to turn right slightly
 void turnRightSlight() {
-  Serial.print(" [turnRightSlight] ");
-
-  digitalWrite(MTR_STEER_PIN1, HIGH);
-  digitalWrite(MTR_STEER_PIN2, LOW);
-  analogWrite(PWM_STEER_PIN, calcSteer("turnRightSlight", STEER_SLOW));
-  delay(STEER_SLOW);
+  steerWheels(STEER_SLOW);
 }
 
 // Function to turn left slightly
 void turnLeftSlight() {
-  Serial.print(" [turnLeftSlight] ");
-
-  digitalWrite(MTR_STEER_PIN1, LOW);
-  digitalWrite(MTR_STEER_PIN2, HIGH);
-  analogWrite(PWM_STEER_PIN, calcSteer("turnLeftSlight", STEER_SLOW));
-  delay(STEER_SLOW);
+  steerWheels(STEER_SLOW * -1);
 }
 
 // Function to stop motors
@@ -159,13 +171,17 @@ void stopMotors() {
 // Function to back up for 2 seconds and pause for a second
 void backupAndPause() {
   Serial.print("[BackupAndPause] ");
-  turnLeftSharp();
+  turnRightSharp();
+  delay(50);
   digitalWrite(MTR_DRIVE_PIN1, LOW);
   digitalWrite(MTR_DRIVE_PIN2, HIGH);
+  analogWrite(PWM_DRIVE_PIN, DRIVE_SLOW);  // Full speed backward
+  delay(100);
+    turnRightSharp();
+
   analogWrite(PWM_DRIVE_PIN, DRIVE_FAST);  // Full speed backward
-  delay(2000);                             // Back up for 2 seconds
-  stopMotors();                            // Stop motors
-  delayMicroseconds(100);                  // Pause for 1 second
+  delay(1500);                             // Back up for 2 seconds
+  stopMotors();
 }
 
 void loop() {
@@ -191,16 +207,20 @@ void loop() {
     // Obstacle detected, back up and pause
     backupAndPause();
   } else if (distanceFront < MIN_DISTANCE || distanceLeft45 < MIN_DISTANCE) {
-
     // Too close to wall, turn right slightly
+    driveForward(DRIVE_SLOW);
     turnRightSharp();
-    driveForward(DRIVE_COAST);
-  } else if (distanceLeft < MAX_DISTANCE) {
-    // Too far from wall, turn left slightly
-    turnLeftSlight();
-    driveForward(DRIVE_COAST);
+  } else if (distanceLeft < MID_DISTANCE) {
+
+    // keep calm and keep driving
+    driveForward(DRIVE_SLOW);
+
+    // proportional steering!
+  
   } else {
     // Maintain forward movement
-    driveForward(DRIVE_SLOW);
+    driveForward(DRIVE_FAST);
+    turnLeftSlight();
   }
+  delay(100);
 }
