@@ -29,12 +29,14 @@ const int DRIVE_COAST = 155;
 const int STEER_SLOW = 220;
 const int STEER_FAST = 255;
 
+const float Kp = 10.0;  // Proportional control factor
+
 long lastDistance1 = 0;
 long lastDistance2 = 0;
 long lastDistance3 = 0;
 
-
-
+int lastDriveValue = -1;
+int lastSteer = 0;
 
 // Function to set up pins
 void setup() {
@@ -80,10 +82,6 @@ int calcDrive(int drive) {
   else
     return DRIVE_FAST;
 }
-
-int lastDriveValue = -1;
-int lastSteer = 0;
-
 
 // Function to drive forward
 void driveForward(int pwmValue) {
@@ -139,6 +137,20 @@ void steerWheels(int cmdSteer) {
   lastSteer = cmdSteer;
 }
 
+// Proportional steering control function
+int proportionalSteering(int distanceLeft) {
+  int error = distanceLeft - STOP_DISTANCE;
+
+  if (error <= -5) {
+    return 255; // Full right steer
+  } else if (error >= 5) {
+    return -255; // Full left steer
+  } else {
+    int steerCmd = constrain(Kp * error, -255, 255);
+    return steerCmd;
+  }
+}
+
 // Function to turn right sharply
 void turnRightSharp() {
   steerWheels(STEER_FAST);
@@ -177,7 +189,7 @@ void backupAndPause() {
   digitalWrite(MTR_DRIVE_PIN2, HIGH);
   analogWrite(PWM_DRIVE_PIN, DRIVE_SLOW);  // Full speed backward
   delay(100);
-    turnRightSharp();
+  turnRightSharp();
 
   analogWrite(PWM_DRIVE_PIN, DRIVE_FAST);  // Full speed backward
   delay(1500);                             // Back up for 2 seconds
@@ -211,12 +223,13 @@ void loop() {
     driveForward(DRIVE_SLOW);
     turnRightSharp();
   } else if (distanceLeft < MID_DISTANCE) {
-
-    // keep calm and keep driving
+    // Keep calm and keep driving
     driveForward(DRIVE_SLOW);
-
-    // proportional steering!
-  
+    
+    // Proportional steering
+    int steerCommand = proportionalSteering(distanceLeft);
+    steerWheels(steerCommand);
+    
   } else {
     // Maintain forward movement
     driveForward(DRIVE_FAST);
