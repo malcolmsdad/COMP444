@@ -4,8 +4,8 @@
 #define MTR_DRIVE_PIN2 7
 
 #define PWM_STEER_PIN 3
-#define MTR_STEER_PIN1 2
-#define MTR_STEER_PIN2 1
+#define MTR_STEER_PIN1 1
+#define MTR_STEER_PIN2 2
 
 #define STDBY_PIN 4
 
@@ -26,8 +26,9 @@ const int DRIVE_FAST = 225;
 const int DRIVE_SLOW = 205;
 const int DRIVE_COAST = 155;
 
-const int STEER_SLOW = 220;
-const int STEER_FAST = 255;
+const int STEER_SLOW = 100;
+const int STEER_FAST = 160;
+const int STEER_HARD = 240;
 
 const float Kp = 10.0;  // Proportional control factor
 
@@ -142,18 +143,18 @@ int proportionalSteering(int distanceLeft) {
   int error = distanceLeft - STOP_DISTANCE;
 
   if (error <= -5) {
-    return 255; // Full right steer
+    return STEER_FAST;  // Full right steer
   } else if (error >= 5) {
-    return -255; // Full left steer
+    return -1 * STEER_FAST;  // Full left steer
   } else {
-    int steerCmd = constrain(Kp * error, -255, 255);
+    int steerCmd = constrain(Kp * error, -1 * STEER_FAST, STEER_FAST);
     return steerCmd;
   }
 }
 
 // Function to turn right sharply
 void turnRightSharp() {
-  steerWheels(STEER_FAST);
+  steerWheels(STEER_HARD);
 }
 
 // Function to turn left sharply
@@ -182,18 +183,14 @@ void stopMotors() {
 
 // Function to back up for 2 seconds and pause for a second
 void backupAndPause() {
+  turnLeftSharp();
   Serial.print("[BackupAndPause] ");
-  turnRightSharp();
-  delay(50);
   digitalWrite(MTR_DRIVE_PIN1, LOW);
   digitalWrite(MTR_DRIVE_PIN2, HIGH);
-  analogWrite(PWM_DRIVE_PIN, DRIVE_SLOW);  // Full speed backward
-  delay(100);
-  turnRightSharp();
-
   analogWrite(PWM_DRIVE_PIN, DRIVE_FAST);  // Full speed backward
-  delay(1500);                             // Back up for 2 seconds
-  stopMotors();
+  turnLeftSharp();
+
+  delay(1500);
 }
 
 void loop() {
@@ -201,8 +198,8 @@ void loop() {
   lastDistance3 = lastDistance2;
   lastDistance2 = lastDistance1;
   lastDistance1 = distanceFront;
-
   delayMicroseconds(50);
+
   long distanceLeft = measureDistance(TRIG_PIN_LEFT, ECHO_PIN_LEFT);
   delayMicroseconds(50);
   long distanceLeft45 = measureDistance(TRIG_PIN_LEFT_45, ECHO_PIN_LEFT_45);
@@ -225,15 +222,15 @@ void loop() {
   } else if (distanceLeft < MID_DISTANCE) {
     // Keep calm and keep driving
     driveForward(DRIVE_SLOW);
-    
+
     // Proportional steering
     int steerCommand = proportionalSteering(distanceLeft);
     steerWheels(steerCommand);
-    
+
   } else {
     // Maintain forward movement
     driveForward(DRIVE_FAST);
     turnLeftSlight();
   }
-  delay(100);
+  delay(150);
 }
