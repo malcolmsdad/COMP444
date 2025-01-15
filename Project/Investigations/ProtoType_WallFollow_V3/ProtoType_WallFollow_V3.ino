@@ -22,15 +22,15 @@ const int MID_DISTANCE = 60;
 const int MIN_DISTANCE = 35;
 const int STOP_DISTANCE = 20;
 
-const int DRIVE_FAST = 225;
-const int DRIVE_SLOW = 205;
-const int DRIVE_COAST = 155;
+const int DRIVE_FAST = 235;
+const int DRIVE_SLOW = 230;
+const int DRIVE_COAST = 220;
 
 const int STEER_SLOW = 100;
-const int STEER_FAST = 160;
-const int STEER_HARD = 240;
+const int STEER_MID = 160;
+const int STEER_FAST = 240;
 
-const float Kp = 10.0;  // Proportional control factor
+const float bias = 10.0; 
 
 long lastDistance1 = 0;
 long lastDistance2 = 0;
@@ -82,6 +82,19 @@ int calcDrive(int drive) {
     return drive;
   else
     return DRIVE_FAST;
+}
+
+void driveBackward(int pwmValue){
+  Serial.print(" [driveBackward: ");
+  digitalWrite(MTR_DRIVE_PIN1, LOW);
+  digitalWrite(MTR_DRIVE_PIN2, HIGH);
+
+  int currentDrive = calcDrive(pwmValue);
+  analogWrite(PWM_DRIVE_PIN, currentDrive);
+  Serial.print(currentDrive);
+  Serial.print("] ");
+  delayMicroseconds(currentDrive);
+  lastDriveValue = pwmValue;
 }
 
 // Function to drive forward
@@ -147,14 +160,14 @@ int proportionalSteering(int distanceLeft) {
   } else if (error >= 5) {
     return -1 * STEER_FAST;  // Full left steer
   } else {
-    int steerCmd = constrain(Kp * error, -1 * STEER_FAST, STEER_FAST);
+    int steerCmd = constrain(bias * error, -1 * STEER_FAST, STEER_FAST);
     return steerCmd;
   }
 }
 
 // Function to turn right sharply
 void turnRightSharp() {
-  steerWheels(STEER_HARD);
+  steerWheels(STEER_FAST);
 }
 
 // Function to turn left sharply
@@ -175,22 +188,39 @@ void turnLeftSlight() {
 // Function to stop motors
 void stopMotors() {
   Serial.print(" [stopMotors] ");
-
   digitalWrite(MTR_DRIVE_PIN1, LOW);
   digitalWrite(MTR_DRIVE_PIN2, LOW);
   analogWrite(PWM_DRIVE_PIN, 0);
+  delay(50);
 }
 
 // Function to back up for 2 seconds and pause for a second
-void backupAndPause() {
-  turnLeftSharp();
-  Serial.print("[BackupAndPause] ");
-  digitalWrite(MTR_DRIVE_PIN1, LOW);
-  digitalWrite(MTR_DRIVE_PIN2, HIGH);
-  analogWrite(PWM_DRIVE_PIN, DRIVE_FAST);  // Full speed backward
-  turnLeftSharp();
+void AvoidFrontObstacle(int distanceLeft) {
 
-  delay(1500);
+  // stop motors
+  stopMotors();
+
+  // if no obstacles to the left, then turn wheels to right and backup
+  if (distanceLeft < MID_DISTANCE)
+    turnRightSharp();
+  else
+    turnLeftSharp();
+
+  // backup for a bit
+  driveBackward(DRIVE_FAST);
+  delay(500);
+  driveBackward(DRIVE_SLOW);
+  delay(150);
+
+  // turn wheels back
+  if (distanceLeft < MID_DISTANCE)
+    turnLeftSharp();
+  else
+    turnRightSharp();
+  
+  // now stop
+  delay(50);
+  stopMotors();
 }
 
 void loop() {
@@ -214,12 +244,15 @@ void loop() {
 
   if (distanceFront < STOP_DISTANCE || distanceLeft45 < STOP_DISTANCE) {
     // Obstacle detected, back up and pause
-    backupAndPause();
+    AvoidFrontObstacle(distanceLeft);
   } else if (distanceFront < MIN_DISTANCE || distanceLeft45 < MIN_DISTANCE) {
+
     // Too close to wall, turn right slightly
     driveForward(DRIVE_SLOW);
     turnRightSharp();
+
   } else if (distanceLeft < MID_DISTANCE) {
+
     // Keep calm and keep driving
     driveForward(DRIVE_SLOW);
 
@@ -232,5 +265,4 @@ void loop() {
     driveForward(DRIVE_FAST);
     turnLeftSlight();
   }
-  delay(150);
 }
