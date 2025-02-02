@@ -26,6 +26,12 @@ void InitBoard()
     // Ensure standby is off to allow motor control
     digitalWrite(STDBY_PIN, HIGH);
 
+    // RF Comm
+    vw_set_tx_pin(RF_TX_PIN); // Set transmitter pin
+    vw_set_rx_pin(RF_RX_PIN); // Set receiver pin
+    vw_setup(RF_BAUD);        // Bits per second speed
+    vw_rx_start();            // Start the receiver PLL running
+
     // Initialize serial communication
     Serial.begin(9600);
 }
@@ -178,3 +184,44 @@ void AvoidFrontObstacle()
     delay(50);
     stopMotors();
 }
+
+void reportLightData()
+{
+    // read ambient light level
+    _internalState.SetLuxLevel(analogRead(LIGHT_SENSOR_PIN)); // Read the value from the light sensor
+
+    // prepare data packet;
+    prepareDataPacket();
+}
+
+void transmitData(const char *msg)
+{
+    // messageHistory.push_back(msg);  // Store the message in the vector
+    Serial.print("TX:");
+    Serial.print(msg);
+    Serial.print("[");
+    Serial.print(strlen(msg));
+    Serial.print("]");
+
+    // Create a new buffer with "1234" prepended
+    char buffer[128];
+    strcpy(buffer, "1234");
+    strcat(buffer, msg);
+
+    vw_send((uint8_t *)buffer, strlen(buffer));
+    vw_wait_tx(); // Wait for the message to be sent
+}
+
+void prepareDataPacket()
+{
+    // Create a JSON document
+    JsonDocument doc;
+    doc["lux"] = _internalState.GetLuxLevel(); // Add the variable to the JSON document
+
+    // Serialize the JSON document to a string
+    char jsonBuffer[128];
+    serializeJson(doc, jsonBuffer);
+
+    transmitData(jsonBuffer);
+}
+

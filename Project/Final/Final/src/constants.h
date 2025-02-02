@@ -19,6 +19,11 @@
 #define TRIG_PIN_LEFT_45 11
 #define ECHO_PIN_LEFT_45 10
 
+#define RF_TX_PIN 12   // PIN RF transmitter pin
+#define RF_RX_PIN 11   // PIN RF receiver pin
+#define RF_BAUD 2000   // Bits per second of RF
+#define LIGHT_SENSOR_PIN A0  // Light sensor is connected to analog pin A0
+
 #endif
 
 // Constants

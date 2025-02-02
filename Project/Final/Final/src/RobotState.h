@@ -27,6 +27,9 @@ public:
     void setLastSteerValue(int steerValue);
     int getLastSteerValue();
 
+    void SetLuxLevel(int luxLevel);
+    int GetLuxLevel();
+
     int CalcIntegralDrive(int drive);
     int ProportionalSteering();
 
@@ -47,6 +50,8 @@ private:
 
     int lastDriveValue = -1;
     int lastSteer = 0;
+
+    int luxLevel = 0;
 }; // Add the semicolon here
 
 #endif // end of RobotState_H definition

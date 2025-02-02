@@ -35,10 +35,10 @@ int RobotState::getLastDriveValue()
 }
 
 void RobotState::setLastSteerValue(int steerValue) { lastSteer = steerValue; }
-int RobotState::getLastSteerValue()
-{
-    return lastSteer;
-}
+int RobotState::getLastSteerValue() { return lastSteer; }
+
+void RobotState::SetLuxLevel(int lvl) { luxLevel = lvl; }
+int RobotState::GetLuxLevel() { return luxLevel; }
 
 int RobotState::CalcIntegralDrive(int drive)
 {

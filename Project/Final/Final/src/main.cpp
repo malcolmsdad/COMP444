@@ -40,4 +40,7 @@ void loop()
     driveForward(DRIVE_FAST);
     turnLeftSlight();
   }
+
+  // read the lux levels
+  reportLightData();
 }
