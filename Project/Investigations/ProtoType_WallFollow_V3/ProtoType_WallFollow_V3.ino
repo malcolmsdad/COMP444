@@ -1,4 +1,4 @@
-// Define Pins 
+// Define Pins
 #define PWM_DRIVE_PIN 5
 #define MTR_DRIVE_PIN1 6
 #define MTR_DRIVE_PIN2 7
