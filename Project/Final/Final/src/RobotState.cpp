@@ -1,4 +1,6 @@
 #include "RobotState.h"
+#include <Arduino.h>
+#include <constants.h>
 
 // Getter and Setters
 
@@ -26,6 +28,17 @@ void RobotState::setLeftDistance(long inVal)
     LeftDistance = inVal;
 }
 
+void RobotState::setLastDriveValue(int driveValue) { lastDriveValue = driveValue; }
+int RobotState::getLastDriveValue()
+{
+    return lastDriveValue;
+}
+
+void RobotState::setLastSteerValue(int steerValue) { lastSteer = steerValue; }
+int RobotState::getLastSteerValue()
+{
+    return lastSteer;
+}
 
 int RobotState::CalcIntegralDrive(int drive)
 {
@@ -35,3 +48,38 @@ int RobotState::CalcIntegralDrive(int drive)
     else
         return DRIVE_FAST;
 }
+
+// Proportional steering control function
+int RobotState::ProportionalSteering()
+{
+    int error = LeftDistance - STOP_DISTANCE;
+
+    if (error <= -5)
+    {
+        return STEER_FAST; // Full right steer
+    }
+    else if (error >= 5)
+    {
+        return -1 * STEER_FAST; // Full left steer
+    }
+    else
+    {
+        int steerCmd = constrain(bias * error, -1 * STEER_FAST, STEER_FAST);
+        return steerCmd;
+    }
+}
+
+void RobotState::SerialPrint()
+{
+    Serial.print(" [Front: ");
+    Serial.print(FrontDistance);
+    Serial.print(" cm, Left: ");
+    Serial.print(LeftDistance);
+    Serial.print(" cm, Left45: ");
+    Serial.print(FrontLeft45Distance);
+    Serial.println(" cm] ");
+}
+
+bool RobotState::IsCollisionDetected() { return (FrontDistance < STOP_DISTANCE || FrontLeft45Distance < STOP_DISTANCE); }
+bool RobotState::IsLeftWallTooClose() { return (FrontDistance < MIN_DISTANCE || FrontLeft45Distance < MIN_DISTANCE); }
+bool RobotState::IsLeftWallFollowing() { return (LeftDistance < MID_DISTANCE); }
