@@ -6,27 +6,31 @@ RobotState _internalState;
 
 void InitBoard()
 {
-    pinMode(PWM_DRIVE_PIN, OUTPUT);
-    pinMode(MTR_DRIVE_PIN1, OUTPUT);
-    pinMode(MTR_DRIVE_PIN2, OUTPUT);
+    // set drive pins
+    pinMode(PWM_DRIVE_PIN, OUTPUT);     // set pwm drive pin
+    pinMode(MTR_DRIVE_PIN1, OUTPUT);    // set forward motion pin
+    pinMode(MTR_DRIVE_PIN2, OUTPUT);    // set backward motion pin
 
-    pinMode(PWM_STEER_PIN, OUTPUT);
-    pinMode(MTR_STEER_PIN1, OUTPUT);
-    pinMode(MTR_STEER_PIN2, OUTPUT);
+    // set steering pins
+    pinMode(PWM_STEER_PIN, OUTPUT);     // set steering pwm pin
+    pinMode(MTR_STEER_PIN1, OUTPUT);    // set left steering pin
+    pinMode(MTR_STEER_PIN2, OUTPUT);    // set right steering pin
 
-    pinMode(STDBY_PIN, OUTPUT);
+    // motor control standby pin
+    pinMode(STDBY_PIN, OUTPUT);         // set shared motr control standby pin
 
-    pinMode(TRIG_PIN_FRONT, OUTPUT);
-    pinMode(ECHO_PIN_FRONT, INPUT);
-    pinMode(TRIG_PIN_LEFT, OUTPUT);
-    pinMode(ECHO_PIN_LEFT, INPUT);
-    pinMode(TRIG_PIN_LEFT_45, OUTPUT);
-    pinMode(ECHO_PIN_LEFT_45, INPUT);
+    // echo sensor pins
+    pinMode(TRIG_PIN_FRONT, OUTPUT);    // set trigger for front sensor
+    pinMode(ECHO_PIN_FRONT, INPUT);     // set echo pin for front sensor
+    pinMode(TRIG_PIN_LEFT, OUTPUT);     // set trigger for left sensor
+    pinMode(ECHO_PIN_LEFT, INPUT);      // set echo pin for left sensor
+    pinMode(TRIG_PIN_LEFT_45, OUTPUT);  // set trigger for 45 left sensor
+    pinMode(ECHO_PIN_LEFT_45, INPUT);   // set echo for 45 left sensor
 
     // Ensure standby is off to allow motor control
     digitalWrite(STDBY_PIN, HIGH);
 
-    // RF Comm
+    // setup RF pins and settings
     vw_set_tx_pin(RF_TX_PIN); // Set transmitter pin
     vw_set_rx_pin(RF_RX_PIN); // Set receiver pin
     vw_setup(RF_BAUD);        // Bits per second speed
@@ -48,6 +52,7 @@ long measureDistance(int trigPin, int echoPin)
     return duration * 0.034 / 2;
 }
 
+// drive the car backward by specified speed
 void driveBackward(int pwmValue)
 {
     Serial.print(" [driveBackward: ");
@@ -185,6 +190,7 @@ void AvoidFrontObstacle()
     stopMotors();
 }
 
+// read the light level to the internal state, and transmit via RF data
 void reportLightData()
 {
     // read ambient light level
@@ -194,6 +200,7 @@ void reportLightData()
     PrepareAndTransmitLightData();
 }
 
+// transmit *msg data to RF 
 void transmitData(const char *msg)
 {
     // messageHistory.push_back(msg);  // Store the message in the vector
@@ -212,6 +219,7 @@ void transmitData(const char *msg)
     vw_wait_tx(); // Wait for the message to be sent
 }
 
+// read the light level from the internal state, encode it and transmit it via RF
 void PrepareAndTransmitLightData()
 {
     // Create a JSON document

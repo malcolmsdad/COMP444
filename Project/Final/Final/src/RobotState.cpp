@@ -69,6 +69,7 @@ int RobotState::ProportionalSteering()
     }
 }
 
+// output internal state to serial
 void RobotState::SerialPrint()
 {
     Serial.print(" [Front: ");
