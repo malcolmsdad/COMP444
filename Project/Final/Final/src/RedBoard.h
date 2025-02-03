@@ -21,5 +21,5 @@ void turnLeftSlight();
 void stopMotors();
 void AvoidFrontObstacle();
 void transmitData(const char *msg);
-void prepareDataPacket();
+void PrepareAndTransmitLightData();
 void reportLightData();

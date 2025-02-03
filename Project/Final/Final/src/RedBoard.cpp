@@ -191,7 +191,7 @@ void reportLightData()
     _internalState.SetLuxLevel(analogRead(LIGHT_SENSOR_PIN)); // Read the value from the light sensor
 
     // prepare data packet;
-    prepareDataPacket();
+    PrepareAndTransmitLightData();
 }
 
 void transmitData(const char *msg)
@@ -212,7 +212,7 @@ void transmitData(const char *msg)
     vw_wait_tx(); // Wait for the message to be sent
 }
 
-void prepareDataPacket()
+void PrepareAndTransmitLightData()
 {
     // Create a JSON document
     JsonDocument doc;
