@@ -28,9 +28,9 @@ const int DRIVE_COAST = 220;
 
 const int STEER_SLOW = 100;
 const int STEER_MID = 160;
-const int STEER_FAST = 240;
+const int STEER_FAST = 200;
 
-const float bias = 10.0; 
+const float bias = 10.0;
 
 long lastDistance1 = 0;
 long lastDistance2 = 0;
@@ -84,7 +84,7 @@ int calcDrive(int drive) {
     return DRIVE_FAST;
 }
 
-void driveBackward(int pwmValue){
+void driveBackward(int pwmValue) {
   Serial.print(" [driveBackward: ");
   digitalWrite(MTR_DRIVE_PIN1, LOW);
   digitalWrite(MTR_DRIVE_PIN2, HIGH);
@@ -201,25 +201,26 @@ void AvoidFrontObstacle(int distanceLeft) {
   stopMotors();
 
   // if no obstacles to the left, then turn wheels to right and backup
-  if (distanceLeft < MID_DISTANCE)
-    turnRightSharp();
-  else
-    turnLeftSharp();
+  turnLeftSharp();
+  turnRightSharp();
+  turnLeftSlight();
+  turnRightSlight();
+  turnLeftSharp();
+
 
   // backup for a bit
   driveBackward(DRIVE_FAST);
-  delay(500);
+  delay(750);
+  turnLeftSharp();
+
   driveBackward(DRIVE_SLOW);
-  delay(150);
+  delay(300);
 
   // turn wheels back
-  if (distanceLeft < MID_DISTANCE)
-    turnLeftSharp();
-  else
-    turnRightSharp();
-  
+  turnRightSharp();
+
   // now stop
-  delay(50);
+  delay(150);
   stopMotors();
 }
 
@@ -245,7 +246,7 @@ void loop() {
   if (distanceFront < STOP_DISTANCE || distanceLeft45 < STOP_DISTANCE) {
     // Obstacle detected, back up and pause
     AvoidFrontObstacle(distanceLeft);
-  } else if (distanceFront < MIN_DISTANCE || distanceLeft45 < MIN_DISTANCE) {
+  } else if (distanceFront < MIN_DISTANCE || distanceLeft45 < MIN_DISTANCE+5) {
 
     // Too close to wall, turn right slightly
     driveForward(DRIVE_SLOW);
